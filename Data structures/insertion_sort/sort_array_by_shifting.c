@@ -6,6 +6,7 @@
 
 void sort_array(int* arr);
 void sort_last_element_array(int* arr, int position);
+void release_array(int** ptr);
 
 int main() {
     int arr[N] = {34,12,6,21,7,14,19,54};
@@ -21,6 +22,10 @@ int main() {
     for(int i= 0; i< N; i++) {
         printf("%d\n", arr[i]);
     }
+
+    release_array(&arr);
+
+    return SUCCESS;
 }
 
 
@@ -42,4 +47,9 @@ void sort_last_element_array(int* arr_p, int size) {
     }
 
     arr_p[i+1] = key;
+}
+
+void release_array(int** ptr) {
+    free(*ptr);
+    *ptr = NULL;
 }

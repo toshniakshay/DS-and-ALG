@@ -6,6 +6,7 @@
 
 void insertion_sort(int* arr_p, int size);
 void sort_array_at_pos(int* arr_p, int size);
+void release_array(int** arr_p);
 
 int main() {
     int* arr;
@@ -31,6 +32,7 @@ int main() {
         printf("%d\n", arr[i]);
     }
 
+    release_array(&arr);
     return SUCCESS;
 }
 
@@ -49,4 +51,9 @@ void sort_array_at_pos(int* arr_p, int size) {
     }
 
     arr_p[i+1] = key;
+}
+
+void release_array(int** arr_p) {
+    free(*arr_p);
+    *arr_p = NULL;
 }
