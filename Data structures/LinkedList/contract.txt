@@ -1,0 +1,12 @@
+
+[10, 20, 30, 40, 50, 60]
+
+-> void printElements()
+-> int removeElement(type* ptr, int data) .... return 1 otherwise -1 if not successful
+-> int getIndex(ttype* ptr, int data) .... positive integer otherwise -1 if not found
+-> void reverseList(type* ptr)
+-> void printElementsInRange(type* ptr, int start, int end)
+-> void release(type* ptr)
+-> Boolean isEmpty(type* ptr)
+-> void sortList(type*)
+-> void insertElementAtPosition(type*, int position, int data);
