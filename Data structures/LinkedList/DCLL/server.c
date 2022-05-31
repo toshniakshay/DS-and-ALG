@@ -308,7 +308,7 @@ list_t* merge_lists(list_t* p_list_1, list_t* p_list_2) {
     return p_list;
 }
 
-
+// Need to understand a bit
 status_t get_reversed_list(list_t* p_list) {
 
 }
