@@ -8,6 +8,9 @@ int main(void) {
     list_t* p_list = NULL;
     node_t* node = NULL;
     data_t data;
+
+    list_t* p_list1 = NULL;
+    list_t* p_list2 = NULL;
   
     p_list = create_list();
 
@@ -44,6 +47,25 @@ int main(void) {
     show_list(p_list, "List before adding element after 102");
     insert_before(p_list, 102, 300);
     show_list(p_list, "List after adding element after 102");
+
+    show_list(p_list, "List before removing element after 102");
+    remove_element(p_list, 102);
+    show_list(p_list, "List after removing element after 102");
+
+    p_list1 = create_list();
+    p_list2 = create_list();
+
+    for(int i=0; i<5; i++) {
+        insert_last(p_list1, i+100);
+    }
+
+     for(int i=0; i<5; i++) {
+        insert_last(p_list2, i+200);
+    }
+
+    printf("Lists created");
+    list_t* result = concatImmutable(p_list1, p_list2);
+    show_list(result, "After adding list1 and list 2");
 
     return(EXIT_SUCCESS);
 }

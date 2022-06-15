@@ -35,7 +35,7 @@ status_t insert_after(list_t* p_list, data_t e_data, data_t n_data);
 
 status_t remove_first(list_t* p_list);
 status_t remove_last(list_t* p_list);
-
+status_t remove_element(list_t* p_list, data_t d_data);
 
 status_t get_first(list_t* p_list, data_t* data);
 status_t get_last(list_t* p_list, data_t* data);

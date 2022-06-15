@@ -214,3 +214,44 @@ status_t insert_after(list_t* p_list, data_t e_data, data_t n_data) {
 
     return SUCCESS;
 }
+
+status_t remove_element(list_t* p_list, data_t d_data) {
+    node_t* existing_node = search_node(p_list, d_data);
+    if(existing_node == NULL) {
+        return LIST_DATA_NOT_FOUND;
+    }
+
+    node_t* p_run = NULL;
+    p_run = p_list->next;
+
+    while(TRUE) {
+        if(p_run->next == existing_node) {
+            break;
+        }
+        p_run = p_run->next;
+    }
+
+    p_run->next = existing_node->next;
+    existing_node->next = NULL;
+    return SUCCESS;
+}
+
+list_t* concatImmutable(list_t* p_list1, list_t* p_list2) {
+    list_t* result = NULL;
+    result = create_list();
+
+    node_t* p_run = NULL;
+    p_run = p_list1->next;
+
+    while(p_run != NULL) {
+        insert_last(result, p_run->data);
+    }
+
+    p_run = p_list2->next;
+    while (p_run != NULL)
+    {
+        insert_last(result, p_run->data);
+    }
+    
+    return result;
+}
