@@ -64,6 +64,9 @@ int main(void) {
     list_t* result = concatImmutable(p_list, p_list2);
     show(result, "After concatination");
 
+    list_t* result = concat(p_list, p_list2);
+    show(result, "After concatination mutable");
+
     show(p_list, "before reverse");
     result = get_reversed_list_immutable(p_list);
     show(result, "After reverse");

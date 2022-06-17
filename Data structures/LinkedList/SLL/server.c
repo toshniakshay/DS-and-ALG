@@ -190,7 +190,18 @@ void show(list_t* p_list, char* msg) {
 }
 
 list_t* concat(list_t* p_list1, list_t* p_list2) {
+    if(is_empty(p_list2)) {
+        return p_list1;
+    }
 
+    node_t* p_run = NULL;
+    for(p_run = p_list1->next; p_run->next != NULL; p_run = p_run->next);
+
+    p_run->next = p_list2->next;
+
+    free(p_list2);
+
+    return p_list1;
 }
 
 list_t* concatImmutable(list_t* p_list1, list_t* p_list2) {
