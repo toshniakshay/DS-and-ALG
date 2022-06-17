@@ -47,8 +47,10 @@ void show(list_t* p_list, char* msg);
 node_t* search(list_t* p_list, data_t s_data);
 
 list_t* concat(list_t* p_list1, list_t* p_list2);
+list_t* concatImmutable(list_t* p_list1, list_t* p_list2);
 list_t* merge(list_t* p_list1, list_t* p_list2);
 list_t* get_reversed_list(list_t* p_list);
+list_t* get_reversed_list_immutable(list_t* p_list);
 
 status_t destroy_list(list_t** pp_list);
 

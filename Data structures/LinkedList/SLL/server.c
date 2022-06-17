@@ -14,8 +14,10 @@ status_t insert_start(list_t* p_list, data_t data) {
 }
 
 status_t insert_end(list_t* p_list, data_t data) {
-    node_t* p_run = p_list->next;
-    while(p_run->next != NULL) p_run = p_run->next;
+    node_t* p_run = p_list;
+    while(p_run->next != NULL) {
+        p_run = p_run->next;
+    }
     generic_insert(p_run, create_new_node(data), p_run->next);
     return SUCCESS;
 }
@@ -191,12 +193,42 @@ list_t* concat(list_t* p_list1, list_t* p_list2) {
 
 }
 
+list_t* concatImmutable(list_t* p_list1, list_t* p_list2) {
+    if(is_empty(p_list2)) {
+        return p_list1;
+    }
+
+    list_t* result_list = createList();
+    node_t* p_run = NULL;
+
+    for(p_run = p_list1->next; p_run != NULL; p_run = p_run->next) {
+        insert_end(result_list, p_run->data);
+    }
+
+     for(p_run = p_list2->next; p_run != NULL; p_run = p_run->next) {
+        insert_end(result_list, p_run->data);
+    }
+
+    return result_list;
+}
+
 list_t* merge(list_t* p_list1, list_t* p_list2) {
 
 }
 
 list_t* get_reversed_list(list_t* p_list) {
 
+}
+
+list_t* get_reversed_list_immutable(list_t* p_list) {
+    list_t* result = createList();
+    node_t* p_run = NULL;
+
+    for(p_run = p_list->next; p_run != NULL; p_run=p_run->next) {
+        insert_start(result, p_run->data);
+    }
+
+    return result;
 }
 
 status_t destroy_list(list_t** pp_list) {

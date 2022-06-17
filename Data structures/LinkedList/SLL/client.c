@@ -6,6 +6,8 @@
 int main(void) {
 
     list_t* p_list;
+    list_t* p_list2;
+
     data_t data;
     status_t status;
 
@@ -53,7 +55,21 @@ int main(void) {
     assert(is_member(p_list, 200) == TRUE);
     assert(is_member(p_list, 2000) == FALSE);
 
+    p_list2 = createList();
+    for(int i=0; i<5; i++) {
+        assert(insert_end(p_list2, i+500) == SUCCESS);
+    }
+    show(p_list2, "p_list2");
+
+    list_t* result = concatImmutable(p_list, p_list2);
+    show(result, "After concatination");
+
+    show(p_list, "before reverse");
+    result = get_reversed_list_immutable(p_list);
+    show(result, "After reverse");
+
     destroy_list(&p_list);
+    destroy_list(&p_list2);
     printf("All Functions passed the test\n");
     return SUCCESS;
 }
