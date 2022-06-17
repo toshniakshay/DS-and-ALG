@@ -14,12 +14,8 @@ status_t insert_start(list_t* p_list, data_t data) {
 }
 
 status_t insert_end(list_t* p_list, data_t data) {
-    node_t* p_run = NULL;
-    p_run = p_list->next;
-
-    while(p_run != NULL) {
-        p_run = p_run->next;
-    }
+    node_t* p_run = p_list->next;
+    while(p_run->next != NULL) p_run = p_run->next;
     generic_insert(p_run, create_new_node(data), p_run->next);
     return SUCCESS;
 }
@@ -29,23 +25,26 @@ status_t insert_before(list_t* p_list, data_t data, data_t new_data) {
         return LIST_EMPTY;
     }
 
+    node_t* e_node = search(p_list, data);
+    node_t* e_node_prev = NULL;
+
+    if(e_node == NULL) {
+        return LIST_DATA_NOT_FOUND;
+    }
+
     node_t* p_run = NULL;
-    node_t* e_data = NULL;
-    node_t* e_data_prev = NULL;
-
-    e_data = p_list->next;
     p_run = p_list->next;
-
-    while(p_run != NULL) {
-        if(p_run->data == data) {
+    e_node_prev = p_list;
+   
+    while(p_run->next != NULL) {
+        if(p_run->data == e_node->data) {
             break;
         }
-        e_data = e_data->next;
-        e_data_prev = e_data_prev->next;
+        e_node_prev = p_run;
         p_run = p_run->next;
     }
 
-    generic_insert(e_data_prev, create_new_node(new_data), e_data);
+    generic_insert(e_node_prev, create_new_node(new_data), e_node_prev->next);
     return SUCCESS;
 }
 
@@ -61,7 +60,7 @@ status_t insert_after(list_t* p_list, data_t data, data_t new_data) {
 }
 
 status_t get_start(list_t* p_list, data_t* data) {
-    if(is_empty) {
+    if(is_empty(p_list)) {
         return LIST_EMPTY;
     }
     *data = p_list->next->data;
@@ -69,12 +68,13 @@ status_t get_start(list_t* p_list, data_t* data) {
 }
 
 status_t get_end(list_t* p_list, data_t* data) {
-    if(is_empty(p_list)) {
-        return LIST_EMPTY;
-    }
+    if(is_empty(p_list)) return LIST_EMPTY;
 
-    node_t* lastNode = get_last_node(p_list);
-    *data = lastNode->data;
+    node_t* p_run = p_list->next;
+    while(p_run->next != NULL) { 
+        p_run = p_run->next;
+    }
+    *data = p_run->data;
     return SUCCESS;
 }
 
@@ -84,7 +84,7 @@ status_t pop_start(list_t* p_list, data_t* data) {
     }
 
     *data = p_list->next->data;
-    generic_delete(p_list->next);
+    generic_delete(p_list, p_list->next);
     return SUCCESS;
 }
 
@@ -93,9 +93,12 @@ status_t pop_end(list_t* p_list, data_t* data) {
         return LIST_EMPTY;
     }
 
-    node_t* lastNode = get_last_node(p_list);
-    *data = lastNode->data;
-    generic_delete(lastNode);
+    node_t* last_node = NULL;
+    node_t* second_last_node = NULL;
+
+    get_last_and_second_last_nodes(p_list, &second_last_node, &last_node);
+    *data = last_node->data;
+    generic_delete(second_last_node, last_node);
     return SUCCESS;
 }
 
@@ -103,7 +106,7 @@ status_t remove_start(list_t* p_list) {
     if(is_empty(p_list)) {
         return LIST_EMPTY;
     }
-    generic_delete(p_list->next);
+    generic_delete(p_list, p_list->next);
     return SUCCESS;
 }
 
@@ -111,12 +114,19 @@ status_t remove_end(list_t* p_list) {
     if(is_empty(p_list)) {
         return LIST_EMPTY;
     }
-    generic_delete(get_last_node(p_list));
+    node_t* last_node = NULL;
+    node_t* second_last_node = NULL;
+
+    get_last_and_second_last_nodes(p_list, &second_last_node, &last_node);
+    generic_delete(second_last_node, last_node);
     return SUCCESS;
 }
 
 status_t remove_data(list_t* p_list) {
-
+    if(is_empty(p_list)) {
+        return LIST_EMPTY;
+    }
+    // Get node and previous node and use generic delete
 }
 
 len_t get_length(list_t* p_list) {
@@ -141,7 +151,22 @@ bool is_empty(list_t* p_list) {
 }
 
 bool is_member(list_t* p_list, data_t data) {
+    if(is_empty(p_list)) {
+        return FALSE;
+    }
 
+    node_t* p_run = NULL;
+    p_run = p_list->next;
+
+    while (p_run != NULL)
+    {
+        if(p_run->data == data) {
+            return TRUE;
+        }
+        p_run = p_run->next;
+    }
+
+    return FALSE;
 }
 
 void show(list_t* p_list, char* msg) {
@@ -174,7 +199,21 @@ list_t* get_reversed_list(list_t* p_list) {
 
 }
 
-status_t destroy_list(list_t** p_list) {
+status_t destroy_list(list_t** pp_list) {
+    list_t* p_list = *pp_list;
+
+    node_t* p_run = NULL;
+    node_t* p_run_next = NULL;
+    p_run = p_list->next;
+
+    while(p_run != NULL) {
+        p_run_next = p_run->next;
+        free(p_run);
+        p_run = p_run_next;
+    }
+    free(p_list);
+    *pp_list = NULL;
+    return SUCCESS; 
 
 }
 
@@ -187,6 +226,26 @@ node_t* search(list_t* p_list, data_t s_data) {
         p_run = p_run->next;
     }
     return NULL;
+}
+
+status_t empty_list(list_t* p_list) {
+    
+    if(is_empty(p_list)) {
+        return LIST_EMPTY;
+    }
+
+    node_t* p_run = NULL;
+    node_t* p_run_prev = NULL;
+    p_run = p_list->next;
+    p_run_prev = p_list;
+
+    while (p_run != NULL) {
+        generic_delete(p_run_prev, p_run);
+        p_run = p_run->next;
+        p_run_prev = p_run_prev->next;
+    }
+    
+    return SUCCESS;
 }
 
 // Auxillary functions
@@ -221,31 +280,24 @@ static void* xmalloc(size_t size) {
     return ptr;
 }
 
-static node_t* get_last_node(list_t* p_list) {
-    node_t* p_run = NULL;
-    p_run = p_list->next;
-
-    while(p_run != NULL) {
-        p_run = p_run->next;
-    }
-
-    return p_run;
-}
-
-static status_t get_last_and_second_last_nodes(list_t* p_list, node_t** second_last_node, node_t* last_node) {
+static status_t get_last_and_second_last_nodes(
+    list_t* p_list,
+    node_t** second_last_node,
+    node_t** last_node
+) {
     node_t* p_run = NULL;
     node_t* p_run_prev = NULL;
 
     p_run = p_list->next;
     p_run_prev = p_list;
 
-    while(p_run != NULL) {
+    while(p_run->next != NULL) {
+        p_run_prev = p_run;
         p_run = p_run->next;
-        p_run_prev = p_run_prev->next;
     }
 
-    *second_last_node = p_run_prev->data;
-    *last_node = p_run->data;
+    *second_last_node = p_run_prev;
+    *last_node = p_run;
 
     return SUCCESS;
 }

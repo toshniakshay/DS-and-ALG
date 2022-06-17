@@ -38,6 +38,8 @@ status_t remove_start(list_t* p_list);
 status_t remove_end(list_t* p_list);
 status_t remove_data(list_t* p_list);
 
+status_t empty_list(list_t* p_list);
+
 len_t get_length(list_t* p_list);
 bool is_empty(list_t* p_list);
 bool is_member(list_t* p_list, data_t data);
@@ -48,14 +50,13 @@ list_t* concat(list_t* p_list1, list_t* p_list2);
 list_t* merge(list_t* p_list1, list_t* p_list2);
 list_t* get_reversed_list(list_t* p_list);
 
-status_t destroy_list(list_t** p_list);
+status_t destroy_list(list_t** pp_list);
 
 // Auxillary functions
 static void generic_insert(node_t* p_beg, node_t* p_mid, node_t* p_end);
 static void generic_delete(node_t* p_prev_node, node_t* p_delete_node);
 static void* xmalloc(size_t size);
 static node_t* create_new_node(data_t data);
-static status_t get_last_and_second_last_nodes(list_t* p_list, node_t** second_last_node, node_t* last_node);
-static node_t get_last_node(list_t* p_list);
+static status_t get_last_and_second_last_nodes(list_t* p_list, node_t** second_last_node, node_t** last_node);
 
 #endif
