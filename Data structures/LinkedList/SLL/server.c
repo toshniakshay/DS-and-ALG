@@ -224,7 +224,41 @@ list_t* concatImmutable(list_t* p_list1, list_t* p_list2) {
 }
 
 list_t* merge(list_t* p_list1, list_t* p_list2) {
+    node_t* p_run1 = NULL;
+    node_t* p_run2 = NULL;
+    node_t* p_merged_list = NULL;
 
+    p_run1 = p_list1->next;
+    p_run2 = p_list2->next;
+    p_merged_list = createList();
+
+    while (TRUE) {
+        if(p_run1 == NULL) {
+            while (p_run2 != NULL) {
+                insert_end(p_merged_list, p_run2->data);
+                p_run2 = p_run2->next;
+            }
+            break;
+        }
+
+        if(p_run2 == NULL) {
+            while(p_run1 != NULL) {
+                insert_end(p_merged_list, p_run1->data);
+                p_run1 = p_run1->next;
+            }
+            break;
+        }
+
+        if(p_run1->data <= p_run2->data) {
+            insert_end(p_merged_list, p_run1->data);
+            p_run1 = p_run1->next;
+        } else {
+            insert_end(p_merged_list, p_run2->data);
+            p_run2 = p_run2->next;
+        }
+    }
+
+    return p_merged_list;
 }
 
 list_t* get_reversed_list(list_t* p_list) {
