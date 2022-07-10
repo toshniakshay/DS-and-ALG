@@ -37,7 +37,7 @@ int main() {
 
 int sum_all_elements(int index, int result) {
     if(index == N) {
-        return result;
+        return result + g_ptr[index];
     }
     sum_all_elements(index + 1, result + g_ptr[index]);
 }
